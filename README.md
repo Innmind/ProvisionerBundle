@@ -1,4 +1,4 @@
-# InnmindRabbitMQProvisionerBundle
+# InnmindProvisionerBundle
 
 This bundle automatically launches rabbitmq consumers when one finish its job. It will determine how many consumers to launch based on resource you allow and the number of messages to consume from the queue.
 

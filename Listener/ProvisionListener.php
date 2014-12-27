@@ -48,7 +48,6 @@ class ProvisionListener
         for ($i = 0; $i < $toRun; $i++) {
             $process = new Process($command);
             $process->start();
-            var_dump($process->isStarted());
         }
     }
 }

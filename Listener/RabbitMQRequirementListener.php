@@ -8,7 +8,6 @@ use Innmind\ProvisionerBundle\RabbitMQ\Admin;
 use Innmind\ProvisionerBundle\Event\ProvisionRequirementEvent;
 use Innmind\ProvisionerBundle\Math;
 use Innmind\ProvisionerBundle\CommandHelper;
-use Symfony\Component\Process\Process;
 use Psr\Log\LoggerInterface;
 
 class RabbitMQRequirementListener

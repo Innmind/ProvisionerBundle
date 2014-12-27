@@ -18,8 +18,6 @@ class LoadRabbitMQConfigPass implements CompilerPassInterface
             'old_sound_rabbit_mq.consumer'
         );
 
-        $config = [];
-
         foreach ($consumers as $id => $tags) {
             $def = $container->getDefinition($id);
 

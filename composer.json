@@ -1,0 +1,35 @@
+{
+    "name": "innmind/provisioner-bundle",
+    "type": "symfony-bundle",
+    "description": "This Bundle automatically spawn new processes when one finishes",
+    "keywords": ["rabbitmq", "process", "consumer"],
+    "homepage": "http://github.com/Baptouuuu/InnmindProvisionerBundle",
+    "license": "MIT",
+    "version": "1.0.0-dev"
+    "authors": [
+        {
+            "name": "Baptiste Langlade",
+            "email": "langlade.baptiste@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Baptouuuu/InnmindProvisionerBundle/issues"
+    },
+    "require": {
+        "php": ">=5.4",
+        "psr/log": "~1.0",
+        "symfony/filesystem": "~2.6",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "guzzlehttp/guzzle": "~5.1",
+        "symfony/console": "~2.3",
+        "symfony/process": "~2.3",
+        "symfony/finder": "~2.3",
+        "symfony/event-dispatcher": "~2.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "Innmind\\ProvisionerBundle": ""
+        }
+    },
+    "target-dir": "Innmind/ProvisionerBundle"
+}

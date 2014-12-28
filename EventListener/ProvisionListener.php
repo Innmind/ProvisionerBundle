@@ -1,6 +1,6 @@
 <?php
 
-namespace Innmind\ProvisionerBundle\Listener;
+namespace Innmind\ProvisionerBundle\EventListener;
 
 use Innmind\ProvisionerBundle\Event\ProvisionEvent;
 use Symfony\Component\Process\Process;

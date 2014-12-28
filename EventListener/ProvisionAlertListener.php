@@ -1,6 +1,6 @@
 <?php
 
-namespace Innmind\ProvisionerBundle\Listener;
+namespace Innmind\ProvisionerBundle\EventListener;
 
 use Innmind\ProvisionerBundle\Event\ProvisionAlertEvent;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;

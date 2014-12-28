@@ -1,8 +1,8 @@
 <?php
 
-namespace Innmind\ProvisionerBundle\Tests\Listener;
+namespace Innmind\ProvisionerBundle\Tests\EventListener;
 
-use Innmind\ProvisionerBundle\Listener\RabbitMQRequirementListener;
+use Innmind\ProvisionerBundle\EventListener\RabbitMQRequirementListener;
 use Innmind\ProvisionerBundle\ProcessStatusHandler;
 use Innmind\ProvisionerBundle\RabbitMQ\QueueHistory;
 use Innmind\ProvisionerBundle\RabbitMQ\Admin;

@@ -2,15 +2,15 @@ parameters:
     innmind_provisioner.server.class: Innmind\ProvisionerBundle\Server\Server
     innmind_provisioner.process_status_handler.class: Innmind\ProvisionerBundle\ProcessStatusHandler
     innmind_provisioner.decision_manager.class: Innmind\ProvisionerBundle\DecisionManager
-    innmind_provisioner.listener.rabbitmq.class: Innmind\ProvisionerBundle\Listener\RabbitMQRequirementListener
-    innmind_provisioner.listener.provision.class: Innmind\ProvisionerBundle\Listener\ProvisionListener
-    innmind_provisioner.listener.alert.class: Innmind\ProvisionerBundle\Listener\ProvisionAlertListener
+    innmind_provisioner.listener.rabbitmq.class: Innmind\ProvisionerBundle\EventListener\RabbitMQRequirementListener
+    innmind_provisioner.listener.provision.class: Innmind\ProvisionerBundle\EventListener\ProvisionListener
+    innmind_provisioner.listener.alert.class: Innmind\ProvisionerBundle\EventListener\ProvisionAlertListener
     innmind_provisioner.rabbitmq.queue_history.class: Innmind\ProvisionerBundle\RabbitMQ\QueueHistory
     innmind_provisioner.rabbitmq.admin.class: Innmind\ProvisionerBundle\RabbitMQ\Admin
     innmind_provisioner.alerter.email.class: Innmind\ProvisionerBundle\Alert\EmailAlerter
     innmind_provisioner.alerter.webhook.class: Innmind\ProvisionerBundle\Alert\WebhookAlerter
     innmind_provisioner.http_client.class: GuzzleHttp\Client
-    innmind_provisioner.listener.console.class: Innmind\ProvisionerBundle\Listener\ConsoleListener
+    innmind_provisioner.listener.console.class: Innmind\ProvisionerBundle\EventListener\ConsoleListener
 
 services:
     innmind_provisioner.server:

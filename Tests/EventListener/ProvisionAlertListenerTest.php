@@ -1,8 +1,8 @@
 <?php
 
-namespace Innmind\ProvisionerBundle\Tests\Listener;
+namespace Innmind\ProvisionerBundle\Tests\EventListener;
 
-use Innmind\ProvisionerBundle\Listener\ProvisionAlertListener;
+use Innmind\ProvisionerBundle\EventListener\ProvisionAlertListener;
 use Innmind\ProvisionerBundle\Event\ProvisionAlertEvent;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
 use Symfony\Component\Console\Input\InputInterface;

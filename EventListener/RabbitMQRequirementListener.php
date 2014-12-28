@@ -1,6 +1,6 @@
 <?php
 
-namespace Innmind\ProvisionerBundle\Listener;
+namespace Innmind\ProvisionerBundle\EventListener;
 
 use Innmind\ProvisionerBundle\ProcessStatusHandler;
 use Innmind\ProvisionerBundle\RabbitMQ\HistoryInterface;

@@ -4,8 +4,6 @@ namespace Innmind\ProvisionerBundle\Listener;
 
 use Innmind\ProvisionerBundle\DecisionManager;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use Symfony\Component\Console\Input\ArgvInput;
-use ReflectionObject;
 
 /**
  * Check if the provisioner must be runned when a command finishes

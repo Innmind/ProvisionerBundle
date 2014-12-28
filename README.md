@@ -4,6 +4,18 @@
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d1f6a225-90d5-47fd-a30a-cea46dd18fd4/big.png)](https://insight.sensiolabs.com/projects/d1f6a225-90d5-47fd-a30a-cea46dd18fd4)
 
-This bundle automatically launches rabbitmq consumers when one finish its job. It will determine how many consumers to launch based on resource you allow and the number of messages to consume from the queue.
+This bundle provide a mechanism to automatically run symfony commands when one finishes and adapt the number runned based on the server resources available. Currently it only works for the `rabbitmq:consumer` command provided by [`RabbitMqBundle`](https://github.com/videlalvaro/RabbitMqBundle), but check the [documentation](Resources/doc/) to see to extend the bundle capacities.
 
-When it can't launch a new consumer due to resource limitation (not enough CPU), it will alert you by mail that you may need to buy more servers.
+The bundle also provide an laerting mechanism when server at full capacity or under used.
+
+## Documentation
+
+The whole [documentation](Resources/doc/README.md) is available in the `Resources/doc` folder.
+
+## License
+
+This bundle is under the MIT license. See the complete license in the bundle:
+
+```
+Resources/meta/LIENSE
+```

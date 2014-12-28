@@ -141,5 +141,13 @@ class RabbitMQRequirementListenerTest extends \PHPUnit_Framework_TestCase
             2
         );
         $this->assertEquals(4, $required);
+
+        $required = $this->listener->computeRequirement(
+            200,
+            200,
+            50,
+            2
+        );
+        $this->assertEquals(2, $required);
     }
 }

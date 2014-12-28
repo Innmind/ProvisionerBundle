@@ -168,6 +168,11 @@ class RabbitMQRequirementListener
                     (int) $consumers >= 1
                 ) {
                     $consumersToLaunch = 0;
+                } else if (
+                    (int) $diff === 0 &&
+                    $currentDepth > (int) $messages
+                ) {
+                    $consumersToLaunch = 2;
                 }
             } else {
                 $consumersToLaunch = (int) floor($diff / $messages);

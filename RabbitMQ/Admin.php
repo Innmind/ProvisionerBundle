@@ -47,7 +47,7 @@ class Admin
     {
         $conf = $this->consumers[(string) $queue];
 
-        $count = 177262;
+        $count = 0;
         $process = new Process(sprintf(
             'rabbitmqadmin -H %s -P %s -V %s -u %s -p %s list queues name messages --format=kvp',
             $conf['host'],

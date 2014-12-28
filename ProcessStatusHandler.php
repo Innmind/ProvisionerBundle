@@ -10,7 +10,7 @@ use Innmind\ProvisionerBundle\Server\ServerInterface;
 class ProcessStatusHandler
 {
     const COMPUTE_ITERATIONS = 3;
-    const ITERATIONS_SLEEP = 10;
+    const ITERATIONS_SLEEP = 2;
 
     protected $informations = [];
     protected $server;

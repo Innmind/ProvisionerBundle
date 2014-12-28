@@ -79,6 +79,10 @@ class InnmindProvisionerExtension extends Extension
                 ->addMethodCall(
                     'setRecipient',
                     [$config['alerting']['email']]
+                )
+                ->addMethodCall(
+                    'setMailer',
+                    [new Reference('mailer')]
                 );
         }
 

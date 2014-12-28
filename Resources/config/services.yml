@@ -73,9 +73,8 @@ services:
 
     innmind_provisioner.alerter.email:
         class: %innmind_provisioner.alerter.email.class%
-        # calls:
-        #     - ['setMailer', ['@mailer']]
-        #     - ['setHost', ['%router.request_context.host%']]
+        calls:
+            - ['setHost', ['%router.request_context.host%']]
 
     innmind_provisioner.alerter.webhook:
         class: %innmind_provisioner.alerter.webhook.class%

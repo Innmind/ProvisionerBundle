@@ -3,21 +3,22 @@
 namespace Innmind\ProvisionerBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\Console\Input\InputInterface;
 
 abstract class AbstractEvent extends Event
 {
     protected $commandName;
-    protected $args;
+    protected $input;
 
     /**
      * Construct an event for the given command
      * @param string $name Command name
-     * @param array  $args Command arguments
+     * @param InputInterface $input Command input
      */
-    public function __construct($name, array $args)
+    public function __construct($name, InputInterface $input)
     {
         $this->commandName = (string) $name;
-        $this->args = $args;
+        $this->input = $input;
     }
 
     /**
@@ -31,12 +32,12 @@ abstract class AbstractEvent extends Event
     }
 
     /**
-     * Return the command arguments
+     * Return the command input
      *
-     * @return array
+     * @return InputInterface
      */
-    public function getCommandArguments()
+    public function getCommandInput()
     {
-        return $this->args;
+        return $this->input;
     }
 }

@@ -95,7 +95,7 @@ class ProvisionAlertListener
             $alerter->alert(
                 $type,
                 $event->getCommandName(),
-                $event->getCommandArguments(),
+                $event->getCommandInput(),
                 $cpuUsage,
                 $loadAverage,
                 $leftOver

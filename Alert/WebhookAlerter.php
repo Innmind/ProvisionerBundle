@@ -2,6 +2,7 @@
 
 namespace Innmind\ProvisionerBundle\Alert;
 
+use Symfony\Component\Console\Input\InputInterface;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 
@@ -47,7 +48,7 @@ class WebhookAlerter implements AlerterInterface
     /**
      * {@inheritdoc}
      */
-    public function alert($type, $name, array $args, $cpuUsage, $loadAverage, $leftOver = 0)
+    public function alert($type, $name, InputInterface $input, $cpuUsage, $loadAverage, $leftOver = 0)
     {
         foreach ($this->uris as $uri) {
             $this->client->post(
@@ -55,10 +56,7 @@ class WebhookAlerter implements AlerterInterface
                 [
                     'body' => [
                         'type' => $type,
-                        'command' => [
-                            'name' => $name,
-                            'arguments' => $args,
-                        ],
+                        'command' => (string) $input,
                         'cpu' => $cpuUsage,
                         'load_average' => $loadAverage,
                         'required_processes' => $leftOver,

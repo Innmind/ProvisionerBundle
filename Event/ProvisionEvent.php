@@ -2,6 +2,8 @@
 
 namespace Innmind\ProvisionerBundle\Event;
 
+use Symfony\Component\Console\Input\InputInterface;
+
 /**
  * Event fired to instruct to run the given number of processes
  */
@@ -13,12 +15,12 @@ class ProvisionEvent extends AbstractEvent
      * Constructor
      *
      * @param string $name
-     * @param array  $args
+     * @param InputInterface $input
      * @param int $count
      */
-    public function __construct($name, array $args, $count)
+    public function __construct($name, InputInterface $input, $count)
     {
-        parent::__construct($name, $args);
+        parent::__construct($name, $input);
 
         $this->count = (int) $count;
     }

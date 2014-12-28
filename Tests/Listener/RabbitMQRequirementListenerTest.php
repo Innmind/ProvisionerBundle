@@ -10,6 +10,10 @@ use Innmind\ProvisionerBundle\Event\ProvisionRequirementEvent;
 use Innmind\ProvisionerBundle\Server\DummyServer;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class RabbitMQRequirementListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +43,7 @@ class RabbitMQRequirementListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesntHandleEvent()
     {
-        $event = new ProvisionRequirementEvent('vendor:command:test', []);
+        $event = new ProvisionRequirementEvent('vendor:command:test', new ArrayInput([]));
 
         $this->listener->handle($event);
 
@@ -49,10 +53,19 @@ class RabbitMQRequirementListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetProvisionRequirement()
     {
-        $event = new ProvisionRequirementEvent('rabbitmq:consumer', [
-            'foo',
-            'messages' => '50'
-        ]);
+        $event = new ProvisionRequirementEvent(
+            'rabbitmq:consumer',
+            new ArrayInput(
+                [
+                    'name' => 'foo',
+                    '--messages' => '50'
+                ],
+                new InputDefinition([
+                    new InputArgument('name', InputArgument::REQUIRED),
+                    new InputOption('messages', 'm', InputOption::VALUE_OPTIONAL),
+                ])
+            )
+        );
 
         $this->listener->handle($event);
 

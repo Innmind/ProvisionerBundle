@@ -7,8 +7,8 @@ use Innmind\ProvisionerBundle\RabbitMQ\HistoryInterface;
 use Innmind\ProvisionerBundle\RabbitMQ\Admin;
 use Innmind\ProvisionerBundle\Event\ProvisionRequirementEvent;
 use Innmind\ProvisionerBundle\Math;
-use Innmind\ProvisionerBundle\CommandHelper;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 class RabbitMQRequirementListener
 {
@@ -69,18 +69,21 @@ class RabbitMQRequirementListener
             return;
         }
 
-        $args = $event->getCommandArguments();
+        $input = $event->getCommandInput();
+
+        if (!$input->hasOption('messages')) {
+            throw new RuntimeException('Consumers must be run with the "messages" option');
+        }
 
         $command = sprintf(
-            'console %s %s',
-            $event->getCommandName(),
-            CommandHelper::getArgumentsAsString($args)
+            'console %s',
+            (string) $input
         );
 
         $consumers = $this->processStatus->getProcessCount($command);
-        $messages = (int) $event->getCommandArguments()['messages'];
+        $messages = (int) $input->getOption('messages');
 
-        $queue = $event->getCommandArguments()[0];
+        $queue = $input->getArgument('name');
 
         $depth = $this->admin->listQueueMessages($queue);
 

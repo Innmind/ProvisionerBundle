@@ -5,6 +5,8 @@ namespace Innmind\ProvisionerBundle\Tests\Listener;
 use Innmind\ProvisionerBundle\Listener\ProvisionAlertListener;
 use Innmind\ProvisionerBundle\Event\ProvisionAlertEvent;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\ArrayInput;
 
 class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,12 +31,13 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $server->method('getCpuUsage')->willReturn(5);
         $server->method('getCurrentLoadAverage')->willReturn(1);
         $this->listener->setServer($server);
+        $input = new ArrayInput([]);
 
-        $event = new ProvisionAlertEvent('foo', [], 0);
+        $event = new ProvisionAlertEvent('foo', $input, 0);
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [AlerterInterface::UNDER_USED, 'foo', [], 5, 1, 0],
+            [AlerterInterface::UNDER_USED, 'foo', $input, 5, 1, 0],
             $this->alerter->getData()
         );
     }
@@ -47,12 +50,13 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $server->method('getCpuUsage')->willReturn(20);
         $server->method('getCurrentLoadAverage')->willReturn(0.1);
         $this->listener->setServer($server);
+        $input = new ArrayInput([]);
 
-        $event = new ProvisionAlertEvent('foo', [], 0);
+        $event = new ProvisionAlertEvent('foo', $input, 0);
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [AlerterInterface::UNDER_USED, 'foo', [], 20, 0.1, 0],
+            [AlerterInterface::UNDER_USED, 'foo', $input, 20, 0.1, 0],
             $this->alerter->getData()
         );
     }
@@ -65,12 +69,13 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $server->method('getCpuUsage')->willReturn(200);
         $server->method('getCurrentLoadAverage')->willReturn(2);
         $this->listener->setServer($server);
+        $input = new ArrayInput([]);
 
-        $event = new ProvisionAlertEvent('foo', [], 10);
+        $event = new ProvisionAlertEvent('foo', $input, 10);
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [AlerterInterface::OVER_USED, 'foo', [], 200, 2, 10],
+            [AlerterInterface::OVER_USED, 'foo', $input, 200, 2, 10],
             $this->alerter->getData()
         );
     }
@@ -83,12 +88,13 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $server->method('getCpuUsage')->willReturn(80);
         $server->method('getCurrentLoadAverage')->willReturn(5);
         $this->listener->setServer($server);
+        $input = new ArrayInput([]);
 
-        $event = new ProvisionAlertEvent('foo', [], 10);
+        $event = new ProvisionAlertEvent('foo', $input, 10);
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [AlerterInterface::OVER_USED, 'foo', [], 80, 5, 10],
+            [AlerterInterface::OVER_USED, 'foo', $input, 80, 5, 10],
             $this->alerter->getData()
         );
     }
@@ -102,7 +108,7 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $server->method('getCurrentLoadAverage')->willReturn(2);
         $this->listener->setServer($server);
 
-        $event = new ProvisionAlertEvent('foo', [], 0);
+        $event = new ProvisionAlertEvent('foo', new ArrayInput([]), 0);
         $this->listener->handle($event);
 
         $this->assertEquals(
@@ -120,7 +126,7 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $server->method('getCurrentLoadAverage')->willReturn(2);
         $this->listener->setServer($server);
 
-        $event = new ProvisionAlertEvent('foo', [], 10);
+        $event = new ProvisionAlertEvent('foo', new ArrayInput([]), 10);
         $this->listener->handle($event);
 
         $this->assertEquals(
@@ -134,9 +140,9 @@ class FakeAlerter implements AlerterInterface
 {
     protected $data;
 
-    public function alert($type, $name, array $args, $cpuUsage, $loadAverage, $leftOver = 0)
+    public function alert($type, $name, InputInterface $input, $cpuUsage, $loadAverage, $leftOver = 0)
     {
-        $this->data = [$type, $name, $args, $cpuUsage, $loadAverage, $leftOver];
+        $this->data = [$type, $name, $input, $cpuUsage, $loadAverage, $leftOver];
     }
 
     public function getData()

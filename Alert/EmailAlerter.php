@@ -2,7 +2,7 @@
 
 namespace Innmind\ProvisionerBundle\Alert;
 
-use Innmind\ProvisionerBundle\CommandHelper;
+use Symfony\Component\Console\Input\InputInterface;
 use Swift_Mailer;
 use Swift_Message;
 
@@ -48,7 +48,7 @@ class EmailAlerter implements AlerterInterface
     /**
      * {@inheritdoc}
      */
-    public function alert($type, $name, array $args, $cpuUsage, $loadAverage, $leftOver = 0)
+    public function alert($type, $name, InputInterface $input, $cpuUsage, $loadAverage, $leftOver = 0)
     {
         switch ($type) {
             case self::UNDER_USED:
@@ -61,7 +61,7 @@ class EmailAlerter implements AlerterInterface
                     ->setTo($this->recipient)
                     ->setBody(
                         'Command: '.$name."\n".
-                        'Command args: '.CommandHelper::getArgumentsAsString($args)."\n".
+                        'Command input: '.(string) $input."\n".
                         'CPU usage: '.$cpuUsage."\n".
                         'Load average: '.$loadAverage."\n"
                     );
@@ -73,7 +73,7 @@ class EmailAlerter implements AlerterInterface
                     ->setTo($this->recipient)
                     ->setBody(
                         'Command: '.$name."\n".
-                        'Command args: '.CommandHelper::getArgumentsAsString($args)."\n".
+                        'Command input: '.(string) $input."\n".
                         'CPU usage: '.$cpuUsage."\n".
                         'Load average: '.$loadAverage."\n".
                         'Processes required: '.$leftOver."\n"

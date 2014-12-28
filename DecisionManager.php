@@ -9,6 +9,7 @@ use Innmind\ProvisionerBundle\Event\ProvisionEvent;
 use Innmind\ProvisionerBundle\Event\ProvisionAlertEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\LockHandler;
+use Symfony\Component\Console\Input\InputInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -105,9 +106,9 @@ class DecisionManager
      * and dispatch alerts if necessary
      *
      * @param string $name Symfony command name being run
-     * @param array $args Command input arguments
+     * @param InputInterface $input Command input arguments
      */
-    public function provision($name, array $args)
+    public function provision($name, InputInterface $input)
     {
         $lockHandler = new LockHandler(sprintf(
             'provision.%s.lock',
@@ -121,21 +122,20 @@ class DecisionManager
         if ($this->logger) {
             $this->logger->info(
                 'Starting provisioning',
-                ['command' => $name, 'args' => $args]
+                ['command' => $name, 'input' => (string) $input]
             );
         }
 
         $event = $this->dispatcher->dispatch(
             ProvisionEvents::COMPUTE_REQUIREMENTS,
-            new ProvisionRequirementEvent($name, $args)
+            new ProvisionRequirementEvent($name, $input)
         );
 
         $required = $event->getRequiredProcesses();
 
         $command = sprintf(
-            'console %s %s',
-            $name,
-            CommandHelper::getArgumentsAsString($args)
+            'console %s',
+            (string) $input
         );
 
         $allowed = $this->getAllowedProcesses($command);
@@ -150,11 +150,11 @@ class DecisionManager
 
         $this->dispatcher->dispatch(
             ProvisionEvents::PROVISION,
-            new ProvisionEvent($name, $args, $toRun)
+            new ProvisionEvent($name, $input, $toRun)
         );
         $this->dispatcher->dispatch(
             ProvisionEvents::ALERT,
-            new ProvisionAlertEvent($name, $args, $leftOver)
+            new ProvisionAlertEvent($name, $input, $leftOver)
         );
 
         if ($this->logger) {
@@ -162,7 +162,7 @@ class DecisionManager
                 'Finished provisioning',
                 [
                     'command' => $name,
-                    'args' => $args,
+                    'input' => (string) $input,
                     'processes_spawned' => $toRun,
                     'left_overs' => $leftOver,
                 ]

@@ -3,7 +3,6 @@
 namespace Innmind\ProvisionerBundle\Listener;
 
 use Innmind\ProvisionerBundle\Event\ProvisionEvent;
-use Innmind\ProvisionerBundle\CommandHelper;
 use Symfony\Component\Process\Process;
 
 /**
@@ -30,8 +29,7 @@ class ProvisionListener
      */
     public function handle(ProvisionEvent $event)
     {
-        $name = $event->getCommandName();
-        $args = $event->getCommandArguments();
+        $input = $event->getCommandInput();
         $toRun = $event->getCount();
 
         if ($toRun === 0) {
@@ -39,10 +37,9 @@ class ProvisionListener
         }
 
         $command = sprintf(
-            'cd %s && ./console %s %s',
+            'cd %s && ./console %s',
             $this->appDir,
-            $name,
-            CommandHelper::getArgumentsAsString($args)
+            (string) $input
         );
 
         for ($i = 0; $i < $toRun; $i++) {

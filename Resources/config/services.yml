@@ -15,9 +15,11 @@ parameters:
 services:
     innmind_provisioner.server:
         class: %innmind_provisioner.server.class%
+        public: false
 
     innmind_provisioner.process_status_handler:
         class: %innmind_provisioner.process_status_handler.class%
+        public: false
         calls:
             - ['setServer', ['@innmind_provisioner.server']]
 
@@ -39,6 +41,7 @@ services:
 
     innmind_provisioner.rabbitmq.queue_history:
         class: %innmind_provisioner.rabbitmq.queue_history.class%
+        public: false
         calls:
             - ['setStoreDirectory', ['%kernel.cache_dir%/innmind_provisioner']]
             - ['setFilesystem', ['@innmind_provisioner.filesystem']]
@@ -49,6 +52,7 @@ services:
 
     innmind_provisioner.listener.rabbitmq:
         class: %innmind_provisioner.listener.rabbitmq.class%
+        public: false
         calls:
             - ['setProcessStatusHandler', ['@innmind_provisioner.process_status_handler']]
             - ['setQueueHistory', ['@innmind_provisioner.rabbitmq.queue_history']]
@@ -59,6 +63,7 @@ services:
 
     innmind_provisioner.listener.provision:
         class: %innmind_provisioner.listener.provision.class%
+        public: false
         calls:
             - ['setAppDirectory', ['%kernel.root_dir%']]
         tags:
@@ -66,6 +71,7 @@ services:
 
     innmind_provisioner.listener.alert:
         class: %innmind_provisioner.listener.alert.class%
+        public: false
         calls:
             - ['setServer', ['@innmind_provisioner.server']]
         tags:
@@ -73,20 +79,24 @@ services:
 
     innmind_provisioner.alerter.email:
         class: %innmind_provisioner.alerter.email.class%
+        public: false
         calls:
             - ['setHost', ['%router.request_context.host%']]
 
     innmind_provisioner.alerter.webhook:
         class: %innmind_provisioner.alerter.webhook.class%
+        public: false
         calls:
             - ['setHttpClient', ['@innmind_provisioner.http_client']]
             - ['setLogger', ['@logger']]
 
     innmind_provisioner.http_client:
         class: %innmind_provisioner.http_client.class%
+        public: false
 
     innmind_provisioner.listener.console:
         class: %innmind_provisioner.listener.console.class%
+        public: false
         calls:
             - ['setManager', ['@innmind_provisioner.decision_manager']]
         tags:

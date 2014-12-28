@@ -3,6 +3,7 @@
 namespace Innmind\ProvisionerBundle\RabbitMQ;
 
 use Symfony\Component\Process\Process;
+use RuntimeException;
 
 /**
  * Helper to gather informations about queues
@@ -57,6 +58,10 @@ class Admin
             $conf['pwd']
         ));
         $process->run(function ($type, $buffer) use (&$count, $conf) {
+            if (strpos($buffer, 'command not found')) {
+                throw new RuntimeException('Command rabbitmqadmin not found in the system');
+            }
+
             preg_match(
                 '/^name="(?<name>.*)" messages="(?<count>\d+)"$/',
                 trim($buffer),

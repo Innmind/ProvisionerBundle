@@ -52,7 +52,6 @@ services:
 
     innmind_provisioner.listener.rabbitmq:
         class: %innmind_provisioner.listener.rabbitmq.class%
-        public: false
         calls:
             - ['setProcessStatusHandler', ['@innmind_provisioner.process_status_handler']]
             - ['setQueueHistory', ['@innmind_provisioner.rabbitmq.queue_history']]
@@ -63,7 +62,6 @@ services:
 
     innmind_provisioner.listener.provision:
         class: %innmind_provisioner.listener.provision.class%
-        public: false
         calls:
             - ['setAppDirectory', ['%kernel.root_dir%']]
         tags:
@@ -71,7 +69,6 @@ services:
 
     innmind_provisioner.listener.alert:
         class: %innmind_provisioner.listener.alert.class%
-        public: false
         calls:
             - ['setServer', ['@innmind_provisioner.server']]
         tags:
@@ -96,7 +93,6 @@ services:
 
     innmind_provisioner.listener.console:
         class: %innmind_provisioner.listener.console.class%
-        public: false
         calls:
             - ['setManager', ['@innmind_provisioner.decision_manager']]
         tags:

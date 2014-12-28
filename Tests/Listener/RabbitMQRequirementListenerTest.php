@@ -22,7 +22,7 @@ class RabbitMQRequirementListenerTest extends \PHPUnit_Framework_TestCase
         $handler->setUsePrecision(false);
 
         $history = new QueueHistory();
-        $history->setStoreDirectory(__DIR__.'/../../../../../app/cache/test/innmind_provisioner');
+        $history->setStoreDirectory('/tmp/innmind_provisioner');
         $history->setFilesystem(new Filesystem());
         $history->setFinder(new Finder());
 

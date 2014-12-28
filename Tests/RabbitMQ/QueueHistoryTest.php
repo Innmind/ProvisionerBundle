@@ -13,7 +13,7 @@ class QueueHistoryTests extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->h = new QueueHistory();
-        $this->h->setStoreDirectory(__DIR__.'/../../../../../app/cache/test/innmind_provisioner');
+        $this->h->setStoreDirectory('/tmp/innmind_provisioner');
         $this->h->setFilesystem(new Filesystem());
         $this->h->setFinder(new Finder());
     }

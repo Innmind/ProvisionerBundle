@@ -20,7 +20,6 @@ class ProvisionAlertListener
     /**
      * Add a new alerter
      *
-     * @param string $type
      * @param AlerterInterface $alerter
      */
     public function addAlerter(AlerterInterface $alerter)

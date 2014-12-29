@@ -126,9 +126,10 @@ class DecisionManager
             );
         }
 
-        $event = $this->dispatcher->dispatch(
+        $event = new ProvisionRequirementEvent($name, $input);
+        $this->dispatcher->dispatch(
             ProvisionEvents::COMPUTE_REQUIREMENTS,
-            new ProvisionRequirementEvent($name, $input)
+            $event
         );
 
         $required = $event->getRequiredProcesses();

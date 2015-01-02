@@ -99,6 +99,7 @@ class QueueHistory implements HistoryInterface
         foreach ($files as $file) {
             $data = json_decode($file->getContents());
             $this->data[$this->sanitize($key)] = $data;
+
             return $data;
         }
     }

@@ -161,4 +161,51 @@ class InnmindProvisionerExtensionTest extends \PHPUnit_Framework_TestCase
             (string) $calls[0][1][0]
         );
     }
+
+    public function testSetHipChatAlerting()
+    {
+        $def = $this->container->getDefinition('innmind_provisioner.listener.alert');
+        $calls = array_filter($def->getMethodCalls(), function ($el) {
+            return $el[0] === 'addAlerter';
+        });
+
+        $this->assertEquals(0, count($calls));
+
+        $conf = $this->config;
+        $conf['innmind_provisioner']['alerting'] = [
+            'hipchat' => [
+                'token' => 'some token',
+                'room' => 'main'
+            ]
+        ];
+
+        $this->extension->load($conf, $this->container);
+
+        $def = $this->container->getDefinition('innmind_provisioner.listener.alert');
+        $calls = array_filter($def->getMethodCalls(), function ($el) {
+            return $el[0] === 'addAlerter';
+        });
+        $calls = array_values($calls);
+
+        $this->assertEquals(1, count($calls));
+        $this->assertEquals(
+            'innmind_provisioner.alerter.hipchat',
+            (string) $calls[0][1][0]
+        );
+
+        $alerter = $this->container->getDefinition('innmind_provisioner.alerter.hipchat');
+        $calls = array_filter($alerter->getMethodCalls(), function ($el) {
+            return $el[0] === 'setRoom';
+        });
+        $calls = array_values($calls);
+
+        $this->assertEquals(1, count($calls));
+        $this->assertEquals('main', $calls[0][1][0]);
+
+        $client = $this->container->getDefinition('innmind_provisioner.alerter.hipchat.oauth');
+        $this->assertEquals(
+            ['some token'],
+            $client->getArguments()
+        );
+    }
 }

@@ -101,5 +101,26 @@ class InnmindProvisionerExtension extends Extension
                 );
             }
         }
+
+        if (
+            isset($config['alerting']['hipchat']) &&
+            !empty($config['alerting']['hipchat'])
+        ) {
+            $alert->addMethodCall(
+                'addAlerter',
+                [new Reference('innmind_provisioner.alerter.hipchat')]
+            );
+
+            $container
+                ->getDefinition('innmind_provisioner.alerter.hipchat.oauth')
+                ->replaceArgument(0, $config['alerting']['hipchat']['token']);
+
+            $container
+                ->getDefinition('innmind_provisioner.alerter.hipchat')
+                ->addMethodCall(
+                    'setRoom',
+                    [$config['alerting']['hipchat']['room']]
+                );
+        }
     }
 }

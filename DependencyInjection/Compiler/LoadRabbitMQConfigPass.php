@@ -28,6 +28,10 @@ class LoadRabbitMQConfigPass implements CompilerPassInterface
                 }
             }
 
+            if (!isset($queue)) {
+                continue;
+            }
+
             $connectionId = (string) $def->getArgument(0);
             $def = $container->getDefinition($connectionId);
 
@@ -49,6 +53,8 @@ class LoadRabbitMQConfigPass implements CompilerPassInterface
                     $vhost,
                 ]
             );
+
+            unset($queue);
         }
     }
 }

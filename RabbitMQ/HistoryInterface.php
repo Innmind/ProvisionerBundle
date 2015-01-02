@@ -12,6 +12,8 @@ interface HistoryInterface
      *
      * @param string $key
      * @param array $value
+     *
+     * @return void
      */
     public function put($key, array $value);
 

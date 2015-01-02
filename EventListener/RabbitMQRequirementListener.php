@@ -20,7 +20,7 @@ class RabbitMQRequirementListener
     /**
      * Set process status handler
      *
-     * @param ProcessStatusHander $handler
+     * @param ProcessStatusHandler $handler
      */
     public function setProcessStatusHandler(ProcessStatusHandler $handler)
     {

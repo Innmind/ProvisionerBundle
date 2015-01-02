@@ -65,17 +65,18 @@ First, create a class like this:
 namespace Vendor\FooBundle;
 
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
-use Symfony\Component\Console\Input\InputInterface;
+use Innmind\ProvisionerBundle\Alert\Alert;
 
 class MyAlerter implements AlerterInterface
 {
-    public function alert($type, $name, InputInterface $input, $cpuUsage, $loadAverage, $leftOver = 0)
+    public function alert(Alert $alert)
     {
-        //$type can be self::UNDER_USED or self::OVER_USED
-        //$name is the command namespace ie 'vendor:cmd'
-        //$input is the command input with all the set arguments and options
-        //$cpuUsage and $loadAverage are self explanatory
-        //$leftOver is the number of commands that couldn't be run
+        //$alert->getType() can be Alert::UNDER_USED or Alert::OVER_USED
+        //$alert->getCommandName() is the command namespace ie 'vendor:cmd'
+        //$alert->getCommandInput() is the command input with all the set arguments and options
+        //$alert->getCpuUsage() and $loadAverage are self explanatory
+        //$alert->getLeftOver() is the number of commands that couldn't be run
+        //$alert->getRunningProcesses() is the number of commands actually running on the server
     }
 }
 ```

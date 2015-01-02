@@ -76,7 +76,7 @@ class ProcessStatusHandler
     /**
      * Compute the process usage/number for the given command
      *
-     * @param string $ommand
+     * @param string $command
      */
     protected function computeProcessInformations($command)
     {

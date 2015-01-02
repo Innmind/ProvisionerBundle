@@ -1,6 +1,8 @@
 # InnmindProvisionerBundle
 
 [![Build Status](https://travis-ci.org/Baptouuuu/InnmindProvisionerBundle.svg?branch=master)](https://travis-ci.org/Baptouuuu/InnmindProvisionerBundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/?branch=master)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d1f6a225-90d5-47fd-a30a-cea46dd18fd4/big.png)](https://insight.sensiolabs.com/projects/d1f6a225-90d5-47fd-a30a-cea46dd18fd4)
 

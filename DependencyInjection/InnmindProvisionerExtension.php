@@ -68,7 +68,6 @@ class InnmindProvisionerExtension extends Extension
                 ]
             );
 
-
         if (isset($config['alerting']['email'])) {
             $alert->addMethodCall(
                 'addAlerter',
@@ -85,8 +84,10 @@ class InnmindProvisionerExtension extends Extension
                     [new Reference('mailer')]
                 );
         }
-
-        if (isset($config['alerting']['webhook'])) {
+        if (
+            isset($config['alerting']['webhook']) &&
+            !empty($config['alerting']['webhook'])
+        ) {
             $alert->addMethodCall(
                 'addAlerter',
                 [new Reference('innmind_provisioner.alerter.webhook')]
@@ -99,6 +100,48 @@ class InnmindProvisionerExtension extends Extension
                     [$uri]
                 );
             }
+        }
+
+        if (
+            isset($config['alerting']['hipchat']) &&
+            !empty($config['alerting']['hipchat'])
+        ) {
+            $alert->addMethodCall(
+                'addAlerter',
+                [new Reference('innmind_provisioner.alerter.hipchat')]
+            );
+
+            $container
+                ->getDefinition('innmind_provisioner.alerter.hipchat.oauth')
+                ->replaceArgument(0, $config['alerting']['hipchat']['token']);
+
+            $container
+                ->getDefinition('innmind_provisioner.alerter.hipchat')
+                ->addMethodCall(
+                    'setRoom',
+                    [$config['alerting']['hipchat']['room']]
+                );
+        }
+
+        if (
+            isset($config['alerting']['slack']) &&
+            !empty($config['alerting']['slack'])
+        ) {
+            $alert->addMethodCall(
+                'addAlerter',
+                [new Reference('innmind_provisioner.alerter.slack')]
+            );
+
+            $container
+                ->getDefinition('innmind_provisioner.alerter.slack.commander')
+                ->replaceArgument(0, $config['alerting']['slack']['token']);
+
+            $container
+                ->getDefinition('innmind_provisioner.alerter.slack')
+                ->addMethodCall(
+                    'setChannel',
+                    [$config['alerting']['slack']['channel']]
+                );
         }
     }
 }

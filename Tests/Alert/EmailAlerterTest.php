@@ -3,7 +3,7 @@
 namespace Innmind\ProvisionerBundle\Tests\Alert;
 
 use Innmind\ProvisionerBundle\Alert\EmailAlerter;
-use Innmind\ProvisionerBundle\Alert\AlerterInterface;
+use Innmind\ProvisionerBundle\Alert\Alert;
 use Symfony\Component\Console\Input\ArrayInput;
 use Swift_Mailer;
 use Swift_Transport;
@@ -12,45 +12,59 @@ use Swift_Events_EventListener;
 
 class EmailAlerterTest extends \PHPUnit_Framework_TestCase
 {
+    protected $mailer;
+    protected $alerter;
+
+    public function setUp()
+    {
+        $this->mailer = new FakeMailer(new FakeTransport());
+        $this->alerter = new EmailAlerter();
+        $this->alerter->setMailer($this->mailer);
+        $this->alerter->setHost('company.tld');
+    }
+
+    protected function getAlert()
+    {
+        return (new Alert())
+            ->setCommandName('foo')
+            ->setCommandInput(new ArrayInput([]))
+            ->setCpuUsage(10)
+            ->setLoadAverage(1)
+            ->setLeftOver(0);
+    }
+
     public function testNoMailSent()
     {
-        $mailer = new FakeMailer(new FakeTransport());
-        $alerter = new EmailAlerter();
-        $alerter->setMailer($mailer);
-        $alerter->setHost('company.tld');
+        $this->alerter->alert($this->getAlert());
 
-        $alerter->alert('foo', 'foo', new ArrayInput([]), 10, 1, 0);
-
-        $this->assertEquals(null, $mailer->getMessage());
+        $this->assertEquals(null, $this->mailer->getMessage());
     }
 
     public function testSendUnderUsed()
     {
-        $mailer = new FakeMailer(new FakeTransport());
-        $alerter = new EmailAlerter();
-        $alerter->setMailer($mailer);
-        $alerter->setHost('company.tld');
+        $alert = $this
+            ->getAlert()
+            ->setUnderUsed();
 
-        $alerter->alert(AlerterInterface::UNDER_USED, 'foo', new ArrayInput([]), 10, 1, 0);
+        $this->alerter->alert($alert);
 
         $this->assertEquals(
             '[Provision alert] Server under used',
-            $mailer->getMessage()->getSubject()
+            $this->mailer->getMessage()->getSubject()
         );
     }
 
     public function testSendOverUsed()
     {
-        $mailer = new FakeMailer(new FakeTransport());
-        $alerter = new EmailAlerter();
-        $alerter->setMailer($mailer);
-        $alerter->setHost('company.tld');
+        $alert = $this
+            ->getAlert()
+            ->setOverUsed();
 
-        $alerter->alert(AlerterInterface::OVER_USED, 'foo', new ArrayInput([]), 10, 1, 0);
+        $this->alerter->alert($alert);
 
         $this->assertEquals(
             '[Provision alert] Server over used',
-            $mailer->getMessage()->getSubject()
+            $this->mailer->getMessage()->getSubject()
         );
     }
 }

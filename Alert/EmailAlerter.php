@@ -2,7 +2,6 @@
 
 namespace Innmind\ProvisionerBundle\Alert;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Swift_Mailer;
 use Swift_Message;
 
@@ -48,10 +47,10 @@ class EmailAlerter implements AlerterInterface
     /**
      * {@inheritdoc}
      */
-    public function alert($type, $name, InputInterface $input, $cpuUsage, $loadAverage, $leftOver = 0)
+    public function alert(Alert $alert)
     {
-        switch ($type) {
-            case self::UNDER_USED:
+        switch (true) {
+            case $alert->isUnderUsed():
                 $message = Swift_Message::newInstance()
                     ->setSubject('[Provision alert] Server under used')
                     ->setFrom(sprintf(
@@ -60,23 +59,24 @@ class EmailAlerter implements AlerterInterface
                     ))
                     ->setTo($this->recipient)
                     ->setBody(
-                        'Command: '.$name."\n".
-                        'Command input: '.(string) $input."\n".
-                        'CPU usage: '.$cpuUsage."\n".
-                        'Load average: '.$loadAverage."\n"
+                        'Command: '.$alert->getCommandName()."\n".
+                        'Command input: '.(string) $alert->getCommandInput()."\n".
+                        'CPU usage: '.$alert->getCpuUsage()."\n".
+                        'Load average: '.$alert->getLoadAverage()."\n"
                     );
                 break;
-            case self::OVER_USED:
+            case $alert->isOverUsed():
                 $message = Swift_Message::newInstance()
                     ->setSubject('[Provision alert] Server over used')
                     ->setFrom('provision@context.com')
                     ->setTo($this->recipient)
                     ->setBody(
-                        'Command: '.$name."\n".
-                        'Command input: '.(string) $input."\n".
-                        'CPU usage: '.$cpuUsage."\n".
-                        'Load average: '.$loadAverage."\n".
-                        'Processes required: '.$leftOver."\n"
+                        'Command: '.$alert->getCommandName()."\n".
+                        'Command input: '.(string) $alert->getCommandInput()."\n".
+                        'CPU usage: '.$alert->getCpuUsage()."\n".
+                        'Load average: '.$alert->getLoadAverage()."\n".
+                        'Processes required: '.$alert->getLeftOver()."\n",
+                        'Processes running: '.$alert->getRunningProcesses()."\n"
                     );
                 break;
         }

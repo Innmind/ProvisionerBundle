@@ -15,6 +15,10 @@ parameters:
     innmind_provisioner.alerter.hipchat.client.class: GorkaLaucirica\HipchatAPIv2Client\Client
     innmind_provisioner.alerter.hipchat.room_api.class: GorkaLaucirica\HipchatAPIv2Client\API\RoomAPI
     innmind_provisioner.alerter.hipchat.class: Innmind\ProvisionerBundle\Alert\HipChatAlerter
+    innmind_provisioner.alerter.slack.response_factory.class: Frlnc\Slack\Http\SlackResponseFactory
+    innmind_provisioner.alerter.slack.interactor.class: Frlnc\Slack\Http\CurlInteractor
+    innmind_provisioner.alerter.slack.commander.class: Frlnc\Slack\Core\Commander
+    innmind_provisioner.alerter.slack.class: Innmind\ProvisionerBundle\Alert\SlackAlerter
 
 services:
     innmind_provisioner.server:
@@ -122,3 +126,24 @@ services:
         class: %innmind_provisioner.alerter.hipchat.class%
         calls:
             - ['setRoomApi', ['@innmind_provisioner.alerter.hipchat.room_api']]
+
+    innmind_provisioner.alerter.slack.response_factory:
+        class: %innmind_provisioner.alerter.slack.response_factory.class%
+        public: false
+
+    innmind_provisioner.alerter.slack.interactor:
+        class: %innmind_provisioner.alerter.slack.interactor.class%
+        public: false
+        calls:
+            - ['setResponseFactory', ['@innmind_provisioner.alerter.slack.response_factory']]
+
+    innmind_provisioner.alerter.slack.commander:
+        class: %innmind_provisioner.alerter.slack.commander.class%
+        public: false
+        arguments: [~, '@innmind_provisioner.alerter.slack.interactor']
+
+    innmind_provisioner.alerter.slack:
+        class: %innmind_provisioner.alerter.slack.class%
+        calls:
+            - ['setCommander', ['@innmind_provisioner.alerter.slack.commander']]
+            - ['setLogger', ['@logger']]

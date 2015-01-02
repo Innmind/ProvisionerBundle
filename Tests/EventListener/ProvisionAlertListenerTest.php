@@ -24,116 +24,55 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->addAlerter($this->alerter);
     }
 
-    public function testAlertCpuUnderUsed()
+    protected function assert($type, $cpu, $load, $leftOver)
     {
         $server = $this
             ->getMockBuilder('Innmind\\ProvisionerBundle\\Server\\Server')
             ->getMock();
-        $server->method('getCpuUsage')->willReturn(5);
-        $server->method('getCurrentLoadAverage')->willReturn(1);
+        $server->method('getCpuUsage')->willReturn($cpu);
+        $server->method('getCurrentLoadAverage')->willReturn($load);
         $this->listener->setServer($server);
         $input = new ArrayInput([]);
 
-        $event = new ProvisionAlertEvent('foo', $input, 0);
+        $event = new ProvisionAlertEvent('foo', $input, $leftOver);
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [Alert::UNDER_USED, 'foo', $input, 5, 1, 0],
+            $type !== null ?
+                [$type, 'foo', $input, $cpu, $load, $leftOver] :
+                null,
             $this->alerter->getData()
         );
+    }
+
+    public function testAlertCpuUnderUsed()
+    {
+        $this->assert(Alert::UNDER_USED, 5, 1, 0);
     }
 
     public function testAlertLoadAverageUnderUsed()
     {
-        $server = $this
-            ->getMockBuilder('Innmind\\ProvisionerBundle\\Server\\Server')
-            ->getMock();
-        $server->method('getCpuUsage')->willReturn(20);
-        $server->method('getCurrentLoadAverage')->willReturn(0.1);
-        $this->listener->setServer($server);
-        $input = new ArrayInput([]);
-
-        $event = new ProvisionAlertEvent('foo', $input, 0);
-        $this->listener->handle($event);
-
-        $this->assertEquals(
-            [Alert::UNDER_USED, 'foo', $input, 20, 0.1, 0],
-            $this->alerter->getData()
-        );
+        $this->assert(Alert::UNDER_USED, 20, 0.1, 0);
     }
 
     public function testAlertCpuOverUsed()
     {
-        $server = $this
-            ->getMockBuilder('Innmind\\ProvisionerBundle\\Server\\Server')
-            ->getMock();
-        $server->method('getCpuUsage')->willReturn(200);
-        $server->method('getCurrentLoadAverage')->willReturn(2);
-        $this->listener->setServer($server);
-        $input = new ArrayInput([]);
-
-        $event = new ProvisionAlertEvent('foo', $input, 10);
-        $this->listener->handle($event);
-
-        $this->assertEquals(
-            [Alert::OVER_USED, 'foo', $input, 200, 2, 10],
-            $this->alerter->getData()
-        );
+        $this->assert(Alert::OVER_USED, 200, 2, 10);
     }
 
     public function testAlertLoadAverageOverUsed()
     {
-        $server = $this
-            ->getMockBuilder('Innmind\\ProvisionerBundle\\Server\\Server')
-            ->getMock();
-        $server->method('getCpuUsage')->willReturn(80);
-        $server->method('getCurrentLoadAverage')->willReturn(5);
-        $this->listener->setServer($server);
-        $input = new ArrayInput([]);
-
-        $event = new ProvisionAlertEvent('foo', $input, 10);
-        $this->listener->handle($event);
-
-        $this->assertEquals(
-            [Alert::OVER_USED, 'foo', $input, 80, 5, 10],
-            $this->alerter->getData()
-        );
+        $this->assert(Alert::OVER_USED, 80, 5, 10);
     }
 
     public function testNoAlert()
     {
-        $server = $this
-            ->getMockBuilder('Innmind\\ProvisionerBundle\\Server\\Server')
-            ->getMock();
-        $server->method('getCpuUsage')->willReturn(50);
-        $server->method('getCurrentLoadAverage')->willReturn(2);
-        $this->listener->setServer($server);
-
-        $event = new ProvisionAlertEvent('foo', new ArrayInput([]), 0);
-        $this->listener->handle($event);
-
-        $this->assertEquals(
-            null,
-            $this->alerter->getData()
-        );
+        $this->assert(null, 50, 2, 0);
     }
 
     public function testNoAlertEvenIfLeftOverButUnderThreshold()
     {
-        $server = $this
-            ->getMockBuilder('Innmind\\ProvisionerBundle\\Server\\Server')
-            ->getMock();
-        $server->method('getCpuUsage')->willReturn(50);
-        $server->method('getCurrentLoadAverage')->willReturn(2);
-        $this->listener->setServer($server);
-
-        $event = new ProvisionAlertEvent('foo', new ArrayInput([]), 10);
-        $this->listener->handle($event);
-
-        $this->assertEquals(
-            null,
-            $this->alerter->getData()
-        );
+        $this->assert(null, 50, 2, 10);
     }
 }
 

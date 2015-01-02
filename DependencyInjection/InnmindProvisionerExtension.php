@@ -122,5 +122,26 @@ class InnmindProvisionerExtension extends Extension
                     [$config['alerting']['hipchat']['room']]
                 );
         }
+
+        if (
+            isset($config['alerting']['slack']) &&
+            !empty($config['alerting']['slack'])
+        ) {
+            $alert->addMethodCall(
+                'addAlerter',
+                [new Reference('innmind_provisioner.alerter.slack')]
+            );
+
+            $container
+                ->getDefinition('innmind_provisioner.alerter.slack.commander')
+                ->replaceArgument(0, $config['alerting']['slack']['token']);
+
+            $container
+                ->getDefinition('innmind_provisioner.alerter.slack')
+                ->addMethodCall(
+                    'setChannel',
+                    [$config['alerting']['slack']['channel']]
+                );
+        }
     }
 }

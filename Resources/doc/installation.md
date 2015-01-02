@@ -55,6 +55,9 @@ innmind_provisioner:
         email: it@company.tld           # the mail where to send alerts (optional)
         webhook:
             - 'http://url/to/webhook'   # URIs to notify when alerts raised (optional)
+        slack:
+            token: 'unique token'
+            channel: 'channel name where notifications will be posted'
     rabbitmq:
         queue_depth:
             history_length: 10          # how many queue depth to keep, higher will improve prediction on the number of consumers to run; too high will slow down a bit the provisionning process. history is kept in files in symfony cache directory

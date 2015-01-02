@@ -11,6 +11,10 @@ parameters:
     innmind_provisioner.alerter.webhook.class: Innmind\ProvisionerBundle\Alert\WebhookAlerter
     innmind_provisioner.http_client.class: GuzzleHttp\Client
     innmind_provisioner.listener.console.class: Innmind\ProvisionerBundle\EventListener\ConsoleListener
+    innmind_provisioner.alerter.hipchat.oauth.class: GorkaLaucirica\HipchatAPIv2Client\Auth\OAuth2
+    innmind_provisioner.alerter.hipchat.client.class: GorkaLaucirica\HipchatAPIv2Client\Client
+    innmind_provisioner.alerter.hipchat.room_api.class: GorkaLaucirica\HipchatAPIv2Client\API\RoomAPI
+    innmind_provisioner.alerter.hipchat.class: Innmind\ProvisionerBundle\Alert\HipChatAlerter
 
 services:
     innmind_provisioner.server:
@@ -98,3 +102,23 @@ services:
             - ['setManager', ['@innmind_provisioner.decision_manager']]
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: handle }
+
+    innmind_provisioner.alerter.hipchat.oauth:
+        class: %innmind_provisioner.alerter.hipchat.oauth.class%
+        public: false
+        arguments: [~]
+
+    innmind_provisioner.alerter.hipchat.client:
+        class: %innmind_provisioner.alerter.hipchat.client.class%
+        public: false
+        arguments: ['@innmind_provisioner.alerter.hipchat.oauth']
+
+    innmind_provisioner.alerter.hipchat.room_api:
+        class: %innmind_provisioner.alerter.hipchat.room_api.class%
+        public: false
+        arguments: ['@innmind_provisioner.alerter.hipchat.client']
+
+    innmind_provisioner.alerter.hipchat:
+        class: %innmind_provisioner.alerter.hipchat.class%
+        calls:
+            - ['setRoomApi', ['@innmind_provisioner.alerter.hipchat.room_api']]

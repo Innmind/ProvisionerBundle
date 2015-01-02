@@ -55,6 +55,9 @@ innmind_provisioner:
         email: it@company.tld           # the mail where to send alerts (optional)
         webhook:
             - 'http://url/to/webhook'   # URIs to notify when alerts raised (optional)
+        hipchat:
+            token: 'unique token'
+            room: 'room name where notifications will be posted'
         slack:
             token: 'unique token'
             channel: 'channel name where notifications will be posted'

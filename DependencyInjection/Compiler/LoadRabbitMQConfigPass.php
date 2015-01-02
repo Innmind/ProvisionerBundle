@@ -53,6 +53,8 @@ class LoadRabbitMQConfigPass implements CompilerPassInterface
                     $vhost,
                 ]
             );
+
+            unset($queue);
         }
     }
 }

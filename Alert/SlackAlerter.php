@@ -3,6 +3,7 @@
 namespace Innmind\ProvisionerBundle\Alert;
 
 use Frlnc\Slack\Core\Commander;
+use Psr\Log\LoggerInterface;
 
 /**
  * Sends a channel notification when an alert is raised

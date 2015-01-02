@@ -4,6 +4,7 @@ namespace Innmind\ProvisionerBundle\Tests\Alert;
 
 use Innmind\ProvisionerBundle\Alert\WebhookAlerter;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
+use Innmind\ProvisionerBundle\Alert\Alert;
 use Symfony\Component\Console\Input\ArrayInput;
 use GuzzleHttp\Client;
 
@@ -18,7 +19,16 @@ class WebhookAlerterTest extends \PHPUnit_Framework_TestCase
         $alerter->addUri('http://localhost/foo');
         $alerter->addUri('http://localhost/bar');
 
-        $alerter->alert(AlerterInterface::UNDER_USED, 'foo', new ArrayInput([]), 100, 4, 0);
+        $alert = new Alert();
+        $alert
+            ->setUnderUsed()
+            ->setCommandName('foo')
+            ->setCommandInput(new ArrayInput([]))
+            ->setCpuUsage(100)
+            ->setLoadAverage(4)
+            ->setLeftOver(0);
+
+        $alerter->alert($alert);
 
         $this->assertEquals(2, $client->getCalls());
     }

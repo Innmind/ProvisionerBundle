@@ -4,6 +4,7 @@ namespace Innmind\ProvisionerBundle\EventListener;
 
 use Innmind\ProvisionerBundle\Event\ProvisionAlertEvent;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
+use Innmind\ProvisionerBundle\Alert\Alert;
 use Innmind\ProvisionerBundle\Server\ServerInterface;
 
 /**
@@ -70,35 +71,40 @@ class ProvisionAlertListener
         $cpuUsage = $this->server->getCpuUsage();
         $loadAverage = $this->server->getCurrentLoadAverage();
 
+        $alert = new Alert();
+        $alert
+            ->setCommandName(
+                $event->getCommandName()
+            )
+            ->setCommandInput(
+                $event->getCommandInput()
+            )
+            ->setCpuUsage($cpuUsage)
+            ->setLoadAverage($loadAverage)
+            ->setLeftOver($leftOver);
+
         if ($leftOver === 0) {
             if (
                 $cpuUsage <= $this->cpuThreshold[0] ||
                 $loadAverage <= $this->loadAverageThreshold[0]
             ) {
-                $type = AlerterInterface::UNDER_USED;
+                $alert->setUnderUsed();
             }
         } else if ($leftOver > 0) {
             if (
                 $cpuUsage >= $this->cpuThreshold[1] ||
                 $loadAverage >= $this->loadAverageThreshold[1]
             ) {
-                $type = AlerterInterface::OVER_USED;
+                $alert->setOverUsed();
             }
         }
 
-        if (!isset($type)) {
+        if (!$alert->isUnderUsed() && !$alert->isOverUsed()) {
             return;
         }
 
         foreach ($this->alerters as $alerter) {
-            $alerter->alert(
-                $type,
-                $event->getCommandName(),
-                $event->getCommandInput(),
-                $cpuUsage,
-                $loadAverage,
-                $leftOver
-            );
+            $alerter->alert($alert);
         }
     }
 }

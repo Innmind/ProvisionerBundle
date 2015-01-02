@@ -4,6 +4,7 @@ namespace Innmind\ProvisionerBundle\Tests\Alert;
 
 use Innmind\ProvisionerBundle\Alert\EmailAlerter;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
+use Innmind\ProvisionerBundle\Alert\Alert;
 use Symfony\Component\Console\Input\ArrayInput;
 use Swift_Mailer;
 use Swift_Transport;
@@ -18,8 +19,15 @@ class EmailAlerterTest extends \PHPUnit_Framework_TestCase
         $alerter = new EmailAlerter();
         $alerter->setMailer($mailer);
         $alerter->setHost('company.tld');
+        $alert = new Alert();
+        $alert
+            ->setCommandName('foo')
+            ->setCommandInput(new ArrayInput([]))
+            ->setCpuUsage(10)
+            ->setLoadAverage(1)
+            ->setLeftOver(0);
 
-        $alerter->alert('foo', 'foo', new ArrayInput([]), 10, 1, 0);
+        $alerter->alert($alert);
 
         $this->assertEquals(null, $mailer->getMessage());
     }
@@ -30,8 +38,16 @@ class EmailAlerterTest extends \PHPUnit_Framework_TestCase
         $alerter = new EmailAlerter();
         $alerter->setMailer($mailer);
         $alerter->setHost('company.tld');
+        $alert = new Alert();
+        $alert
+            ->setUnderUsed()
+            ->setCommandName('foo')
+            ->setCommandInput(new ArrayInput([]))
+            ->setCpuUsage(10)
+            ->setLoadAverage(1)
+            ->setLeftOver(0);
 
-        $alerter->alert(AlerterInterface::UNDER_USED, 'foo', new ArrayInput([]), 10, 1, 0);
+        $alerter->alert($alert);
 
         $this->assertEquals(
             '[Provision alert] Server under used',
@@ -45,8 +61,16 @@ class EmailAlerterTest extends \PHPUnit_Framework_TestCase
         $alerter = new EmailAlerter();
         $alerter->setMailer($mailer);
         $alerter->setHost('company.tld');
+        $alert = new Alert();
+        $alert
+            ->setOverUsed()
+            ->setCommandName('foo')
+            ->setCommandInput(new ArrayInput([]))
+            ->setCpuUsage(10)
+            ->setLoadAverage(1)
+            ->setLeftOver(0);
 
-        $alerter->alert(AlerterInterface::OVER_USED, 'foo', new ArrayInput([]), 10, 1, 0);
+        $alerter->alert($alert);
 
         $this->assertEquals(
             '[Provision alert] Server over used',

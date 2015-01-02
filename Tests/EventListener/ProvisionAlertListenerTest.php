@@ -5,6 +5,7 @@ namespace Innmind\ProvisionerBundle\Tests\EventListener;
 use Innmind\ProvisionerBundle\EventListener\ProvisionAlertListener;
 use Innmind\ProvisionerBundle\Event\ProvisionAlertEvent;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
+use Innmind\ProvisionerBundle\Alert\Alert;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
@@ -37,7 +38,7 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [AlerterInterface::UNDER_USED, 'foo', $input, 5, 1, 0],
+            [Alert::UNDER_USED, 'foo', $input, 5, 1, 0],
             $this->alerter->getData()
         );
     }
@@ -56,7 +57,7 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [AlerterInterface::UNDER_USED, 'foo', $input, 20, 0.1, 0],
+            [Alert::UNDER_USED, 'foo', $input, 20, 0.1, 0],
             $this->alerter->getData()
         );
     }
@@ -75,7 +76,7 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [AlerterInterface::OVER_USED, 'foo', $input, 200, 2, 10],
+            [Alert::OVER_USED, 'foo', $input, 200, 2, 10],
             $this->alerter->getData()
         );
     }
@@ -94,7 +95,7 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->handle($event);
 
         $this->assertEquals(
-            [AlerterInterface::OVER_USED, 'foo', $input, 80, 5, 10],
+            [Alert::OVER_USED, 'foo', $input, 80, 5, 10],
             $this->alerter->getData()
         );
     }
@@ -140,9 +141,16 @@ class FakeAlerter implements AlerterInterface
 {
     protected $data;
 
-    public function alert($type, $name, InputInterface $input, $cpuUsage, $loadAverage, $leftOver = 0)
+    public function alert(Alert $alert)
     {
-        $this->data = [$type, $name, $input, $cpuUsage, $loadAverage, $leftOver];
+        $this->data = [
+            $alert->getType(),
+            $alert->getCommandName(),
+            $alert->getCommandInput(),
+            $alert->getCpuUsage(),
+            $alert->getLoadAverage(),
+            $alert->getLeftOver()
+        ];
     }
 
     public function getData()

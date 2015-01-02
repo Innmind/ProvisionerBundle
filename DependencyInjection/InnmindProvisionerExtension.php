@@ -68,7 +68,6 @@ class InnmindProvisionerExtension extends Extension
                 ]
             );
 
-
         if (isset($config['alerting']['email'])) {
             $alert->addMethodCall(
                 'addAlerter',

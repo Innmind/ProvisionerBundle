@@ -8,7 +8,6 @@ use Innmind\ProvisionerBundle\Alert\AlerterInterface;
 use Innmind\ProvisionerBundle\Alert\Alert;
 use Innmind\ProvisionerBundle\ProcessStatusHandler;
 use Innmind\ProvisionerBundle\Server\DummyServer;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
 class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase

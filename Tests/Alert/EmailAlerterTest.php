@@ -3,7 +3,6 @@
 namespace Innmind\ProvisionerBundle\Tests\Alert;
 
 use Innmind\ProvisionerBundle\Alert\EmailAlerter;
-use Innmind\ProvisionerBundle\Alert\AlerterInterface;
 use Innmind\ProvisionerBundle\Alert\Alert;
 use Symfony\Component\Console\Input\ArrayInput;
 use Swift_Mailer;

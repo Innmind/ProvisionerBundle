@@ -43,6 +43,10 @@ class LoadRabbitMQConfigPassTest extends \PHPUnit_Framework_TestCase
         $definition->addTag('old_sound_rabbit_mq.consumer');
         $this->container->setDefinition('old_sound_rabbit_mq.foo_consumer', $definition);
 
+        $definition = new Definition('stdClass', [new Reference('old_sound_rabbit_mq.connection.default')]);
+        $definition->addTag('old_sound_rabbit_mq.consumer');
+        $this->container->setDefinition('old_sound_rabbit_mq.bar_consumer', $definition);
+
         $definition = new Definition('stdClass', [
             'localhost',
             '15672',

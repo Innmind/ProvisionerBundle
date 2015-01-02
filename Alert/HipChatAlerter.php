@@ -30,7 +30,7 @@ class HipChatAlerter implements AlerterInterface
      */
     public function setRoom($name)
     {
-        $this->room = (string) $room;
+        $this->room = (string) $name;
     }
 
     /**
@@ -52,7 +52,7 @@ class HipChatAlerter implements AlerterInterface
             );
         } else {
             $color = Message::COLOR_YELLOW;
-            $message = sprintf(
+            $text = sprintf(
                 'Server under used. You may take it down! Command: %s | CPU: %s | Load: %s',
                 (string) $alert->getCommandInput(),
                 $alert->getCpuUsage(),

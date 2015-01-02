@@ -59,6 +59,7 @@ class WebhookAlerter implements AlerterInterface
                         'cpu' => $alert->getCpuUsage(),
                         'load_average' => $alert->getLoadAverage(),
                         'required_processes' => $alert->getLeftOver(),
+                        'running_processes' => $alert->getRunningProcesses(),
                     ]
                 ]
             );

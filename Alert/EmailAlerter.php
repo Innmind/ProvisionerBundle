@@ -75,7 +75,8 @@ class EmailAlerter implements AlerterInterface
                         'Command input: '.(string) $alert->getCommandInput()."\n".
                         'CPU usage: '.$alert->getCpuUsage()."\n".
                         'Load average: '.$alert->getLoadAverage()."\n".
-                        'Processes required: '.$alert->getLeftOver()."\n"
+                        'Processes required: '.$alert->getLeftOver()."\n",
+                        'Processes running: '.$alert->getRunningProcesses()."\n"
                     );
                 break;
         }

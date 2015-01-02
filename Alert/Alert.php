@@ -17,6 +17,7 @@ class Alert
     protected $commandInput;
     protected $cpuUsage;
     protected $loadAverage;
+    protected $runningProcesses;
     protected $leftOver = 0;
 
     /**
@@ -167,6 +168,31 @@ class Alert
     public function getLoadAverage()
     {
         return $this->loadAverage;
+    }
+
+    /**
+     * Set the number of already running processes of the command
+     * being provisioned
+     *
+     * @param int $count
+     *
+     * @return Alert self
+     */
+    public function setRunningProcesses($count)
+    {
+        $this->runningProcesses = (int) $count;
+
+        return $this;
+    }
+
+    /**
+     * Return the number of processes running for the associated command
+     *
+     * @return int
+     */
+    public function getRunningProcesses()
+    {
+        return $this->runningProcesses;
     }
 
     /**

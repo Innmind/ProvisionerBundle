@@ -6,6 +6,8 @@ use Innmind\ProvisionerBundle\EventListener\ProvisionAlertListener;
 use Innmind\ProvisionerBundle\Event\ProvisionAlertEvent;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
 use Innmind\ProvisionerBundle\Alert\Alert;
+use Innmind\ProvisionerBundle\ProcessStatusHandler;
+use Innmind\ProvisionerBundle\Server\DummyServer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
@@ -16,9 +18,13 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $handler = new ProcessStatusHandler();
+        $handler->setServer(new DummyServer());
+        $handler->setUsePrecision(false);
         $this->listener = new ProvisionAlertListener();
         $this->listener->setCpuThresholds(10, 100);
         $this->listener->setLoadAverageThresholds(0.2, 4);
+        $this->listener->setProcessStatusHandler($handler);
         $this->alerter = new FakeAlerter();
         $this->listener->addAlerter($this->alerter);
         $this->listener->addAlerter($this->alerter);
@@ -39,7 +45,7 @@ class ProvisionAlertListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $type !== null ?
-                [$type, 'foo', $input, $cpu, $load, $leftOver] :
+                [$type, 'foo', $input, $cpu, $load, $leftOver, 10] :
                 null,
             $this->alerter->getData()
         );
@@ -88,7 +94,8 @@ class FakeAlerter implements AlerterInterface
             $alert->getCommandInput(),
             $alert->getCpuUsage(),
             $alert->getLoadAverage(),
-            $alert->getLeftOver()
+            $alert->getLeftOver(),
+            $alert->getRunningProcesses(),
         ];
     }
 

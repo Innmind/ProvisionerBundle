@@ -71,6 +71,7 @@ services:
         class: %innmind_provisioner.listener.alert.class%
         calls:
             - ['setServer', ['@innmind_provisioner.server']]
+            - ['setProcessStatusHandler', ['@innmind_provisioner.process_status_handler']]
         tags:
             - { name: kernel.event_listener, event: innmind_provisioner.alert, method: handle }
 

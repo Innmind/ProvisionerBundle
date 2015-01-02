@@ -6,6 +6,7 @@ use Innmind\ProvisionerBundle\Event\ProvisionAlertEvent;
 use Innmind\ProvisionerBundle\Alert\AlerterInterface;
 use Innmind\ProvisionerBundle\Alert\Alert;
 use Innmind\ProvisionerBundle\Server\ServerInterface;
+use Innmind\ProvisionerBundle\ProcessStatusHandler;
 
 /**
  * Alerts when new servers need to be run or the current server
@@ -17,6 +18,7 @@ class ProvisionAlertListener
     protected $cpuThreshold;
     protected $loadAverageThreshold;
     protected $server;
+    protected $processStatus;
 
     /**
      * Add a new alerter
@@ -61,6 +63,16 @@ class ProvisionAlertListener
     }
 
     /**
+     * Set the process status handler
+     *
+     * @param ProcessStatusHandler $handler
+     */
+    public function setProcessStatusHandler(ProcessStatusHandler $handler)
+    {
+        $this->processStatus = $handler;
+    }
+
+    /**
      * Check if an alert needs to be fired
      *
      * @param ProvisionAlertEvent $event
@@ -81,6 +93,12 @@ class ProvisionAlertListener
             )
             ->setCpuUsage($cpuUsage)
             ->setLoadAverage($loadAverage)
+            ->setRunningProcesses(
+                $this->processStatus->getProcessCount(sprintf(
+                    'console %s',
+                    (string) $event->getCommandInput()
+                ))
+            )
             ->setLeftOver($leftOver);
 
         if ($leftOver === 0) {

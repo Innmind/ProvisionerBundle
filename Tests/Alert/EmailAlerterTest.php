@@ -13,68 +13,59 @@ use Swift_Events_EventListener;
 
 class EmailAlerterTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNoMailSent()
+    protected $mailer;
+    protected $alerter;
+
+    public function setUp()
     {
-        $mailer = new FakeMailer(new FakeTransport());
-        $alerter = new EmailAlerter();
-        $alerter->setMailer($mailer);
-        $alerter->setHost('company.tld');
-        $alert = new Alert();
-        $alert
+        $this->mailer = new FakeMailer(new FakeTransport());
+        $this->alerter = new EmailAlerter();
+        $this->alerter->setMailer($this->mailer);
+        $this->alerter->setHost('company.tld');
+    }
+
+    protected function getAlert()
+    {
+        return (new Alert())
             ->setCommandName('foo')
             ->setCommandInput(new ArrayInput([]))
             ->setCpuUsage(10)
             ->setLoadAverage(1)
             ->setLeftOver(0);
+    }
 
-        $alerter->alert($alert);
+    public function testNoMailSent()
+    {
+        $this->alerter->alert($this->getAlert());
 
-        $this->assertEquals(null, $mailer->getMessage());
+        $this->assertEquals(null, $this->mailer->getMessage());
     }
 
     public function testSendUnderUsed()
     {
-        $mailer = new FakeMailer(new FakeTransport());
-        $alerter = new EmailAlerter();
-        $alerter->setMailer($mailer);
-        $alerter->setHost('company.tld');
-        $alert = new Alert();
-        $alert
-            ->setUnderUsed()
-            ->setCommandName('foo')
-            ->setCommandInput(new ArrayInput([]))
-            ->setCpuUsage(10)
-            ->setLoadAverage(1)
-            ->setLeftOver(0);
+        $alert = $this
+            ->getAlert()
+            ->setUnderUsed();
 
-        $alerter->alert($alert);
+        $this->alerter->alert($alert);
 
         $this->assertEquals(
             '[Provision alert] Server under used',
-            $mailer->getMessage()->getSubject()
+            $this->mailer->getMessage()->getSubject()
         );
     }
 
     public function testSendOverUsed()
     {
-        $mailer = new FakeMailer(new FakeTransport());
-        $alerter = new EmailAlerter();
-        $alerter->setMailer($mailer);
-        $alerter->setHost('company.tld');
-        $alert = new Alert();
-        $alert
-            ->setOverUsed()
-            ->setCommandName('foo')
-            ->setCommandInput(new ArrayInput([]))
-            ->setCpuUsage(10)
-            ->setLoadAverage(1)
-            ->setLeftOver(0);
+        $alert = $this
+            ->getAlert()
+            ->setOverUsed();
 
-        $alerter->alert($alert);
+        $this->alerter->alert($alert);
 
         $this->assertEquals(
             '[Provision alert] Server over used',
-            $mailer->getMessage()->getSubject()
+            $this->mailer->getMessage()->getSubject()
         );
     }
 }

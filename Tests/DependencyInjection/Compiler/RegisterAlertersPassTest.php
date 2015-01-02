@@ -6,7 +6,6 @@ use Innmind\ProvisionerBundle\DependencyInjection\Compiler\RegisterAlertersPass;
 use Innmind\ProvisionerBundle\DependencyInjection\InnmindProvisionerExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterAlertersPassTest extends \PHPUnit_Framework_TestCase
 {

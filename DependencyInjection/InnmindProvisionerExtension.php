@@ -85,8 +85,10 @@ class InnmindProvisionerExtension extends Extension
                     [new Reference('mailer')]
                 );
         }
-
-        if (isset($config['alerting']['webhook'])) {
+        if (
+            isset($config['alerting']['webhook']) &&
+            !empty($config['alerting']['webhook'])
+        ) {
             $alert->addMethodCall(
                 'addAlerter',
                 [new Reference('innmind_provisioner.alerter.webhook')]

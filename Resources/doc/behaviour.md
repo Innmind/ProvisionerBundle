@@ -54,6 +54,7 @@ Command input: command:ns arg1 argN --opt1=x --optN=n
 CPU usage: percent
 Load average: float
 Processes required: number of commands that couldn't be run
+Processes running: number of commands running on the server
 ```
 
 ### Webhook
@@ -66,6 +67,19 @@ An alert correspond to a HTTP `POST` request issued to each of the URIs set in t
     'command' => 'symfony:command:namespace arg1 argN --opt1=x --optN=n',
     'cpu' => 'percent',
     'load_average' => 'float',
-    'required_processes' => 'number of commands that couldn't be run'
+    'required_processes' => 'number of commands that couldn't be run',
+    'running_processes' => 'number of commands running on the server'
 ]
+```
+
+### HipChat & Slack
+
+Here are in the order the messages formats when over/under used alerts are raised.
+
+```
+Server at full capacity! Command: %s | CPU: %s | Load: %s | Required: %s | Running: %s
+```
+
+```
+Server under used. You may take it down! Command: %s | CPU: %s | Load: %s
 ```

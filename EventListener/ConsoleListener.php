@@ -3,6 +3,7 @@
 namespace Innmind\ProvisionerBundle\EventListener;
 
 use Innmind\ProvisionerBundle\DecisionManager;
+use Innmind\ProvisionerBundle\TriggerManager;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
 /**
@@ -10,17 +11,17 @@ use Symfony\Component\Console\Event\ConsoleTerminateEvent;
  */
 class ConsoleListener
 {
-    protected $manager;
-    protected $triggers = [];
+    protected $decision;
+    protected $trigger;
 
     /**
      * Set the decision manager
      *
      * @param DecisionManager $manager
      */
-    public function setManager(DecisionManager $manager)
+    public function setDecisionManager(DecisionManager $manager)
     {
-        $this->manager = $manager;
+        $this->decision = $manager;
     }
 
     /**
@@ -28,9 +29,9 @@ class ConsoleListener
      *
      * @param string $command
      */
-    public function addTrigger($command)
+    public function setTriggerManager(TriggerManager $manager)
     {
-        $this->triggers[] = (string) $command;
+        $this->trigger = $manager;
     }
 
     /**
@@ -46,12 +47,10 @@ class ConsoleListener
         }
 
         $command = $event->getCommand()->getName();
+        $input = $event->getInput();
 
-        if (in_array($command, $this->triggers, true)) {
-            $this->manager->provision(
-                $command,
-                $event->getInput()
-            );
+        if ($this->trigger->decode($command, $input)) {
+            $this->decision->provision($command, $input);
         }
     }
 }

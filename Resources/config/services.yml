@@ -19,6 +19,7 @@ parameters:
     innmind_provisioner.alerter.slack.interactor.class: Frlnc\Slack\Http\CurlInteractor
     innmind_provisioner.alerter.slack.commander.class: Frlnc\Slack\Core\Commander
     innmind_provisioner.alerter.slack.class: Innmind\ProvisionerBundle\Alert\SlackAlerter
+    innmind_provisioner.trigger_manager.class: Innmind\ProvisionerBundle\TriggerManager
 
 services:
     innmind_provisioner.server:
@@ -103,7 +104,8 @@ services:
     innmind_provisioner.listener.console:
         class: %innmind_provisioner.listener.console.class%
         calls:
-            - ['setManager', ['@innmind_provisioner.decision_manager']]
+            - ['setDecisionManager', ['@innmind_provisioner.decision_manager']]
+            - ['setTriggerManager', ['@innmind_provisioner.trigger_manager']]
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: handle }
 
@@ -147,3 +149,7 @@ services:
         calls:
             - ['setCommander', ['@innmind_provisioner.alerter.slack.commander']]
             - ['setLogger', ['@logger']]
+
+    innmind_provisioner.trigger_manager:
+        class: %innmind_provisioner.trigger_manager.class%
+        arguments: [~, ~, ~]

@@ -7,6 +7,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
+use Innmind\ProvisionerBundle\Voter\StandardVoter;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -28,14 +29,12 @@ class InnmindProvisionerExtension extends Extension
 
         $container->setParameter('innmind_provisioner', $config);
 
-        $console = $container->getDefinition('innmind_provisioner.listener.console');
+        $triggerManager = $container->getDefinition('innmind_provisioner.trigger_manager');
 
-        foreach ($config['triggers'] as $command) {
-            $console->addMethodCall(
-                'addTrigger',
-                [$command]
-            );
-        }
+        $triggerManager->replaceArgument(0, $config['trigger_manager']['strategy']);
+        $triggerManager->replaceArgument(1, $config['trigger_manager']['allow_if_equal_granted_denied']);
+        $triggerManager->replaceArgument(2, $config['trigger_manager']['allow_if_all_abstain']);
+        $triggerManager->addMethodCall('addVoter', [new StandardVoter($config['triggers'])]);
 
         $container
             ->getDefinition('innmind_provisioner.decision_manager')

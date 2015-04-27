@@ -1,4 +1,4 @@
-# InnmindProvisionerBundle
+# ProvisionerBundle
 
 [![Build Status](https://travis-ci.org/Baptouuuu/InnmindProvisionerBundle.svg?branch=develop)](https://travis-ci.org/Baptouuuu/InnmindProvisionerBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/?branch=develop)

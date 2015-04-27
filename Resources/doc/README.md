@@ -16,3 +16,4 @@ Installation is done in 3 very little steps:
 Because you could want to use the provision mechanism to run other commands as the RabbitMQ ones, the bundle is built in a way you can easily extend it in your applications.
 
 * [Extend](extend.md)
+* [Trigger tuning](trigger-tuning.md)

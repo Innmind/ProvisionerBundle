@@ -2,12 +2,12 @@
 
 namespace Innmind\ProvisionerBundle\Tests\DependencyInjection\Compiler;
 
-use Innmind\ProvisionerBundle\DependencyInjection\Compiler\RegisterAlertersPass;
+use Innmind\ProvisionerBundle\DependencyInjection\Compiler\RegisterVotersPass;
 use Innmind\ProvisionerBundle\DependencyInjection\InnmindProvisionerExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class RegisterAlertersPassTest extends \PHPUnit_Framework_TestCase
+class RegisterVotersPassTest extends \PHPUnit_Framework_TestCase
 {
     protected $container;
 
@@ -38,25 +38,25 @@ class RegisterAlertersPassTest extends \PHPUnit_Framework_TestCase
         $extension->load($config, $this->container);
 
         $definition = new Definition('stdClass');
-        $definition->addTag('innmind_provisioner.alerter');
+        $definition->addTag('innmind_provisioner.voter');
         $this->container->setDefinition('random.service', $definition);
     }
 
-    public function testSetAlerters()
+    public function testSetVoters()
     {
-        $pass = new RegisterAlertersPass();
+        $pass = new RegisterVotersPass();
         $pass->process($this->container);
 
-        $def = $this->container->getDefinition('innmind_provisioner.listener.alert');
+        $def = $this->container->getDefinition('innmind_provisioner.trigger_manager');
         $calls = array_filter($def->getMethodCalls(), function ($el) {
-            return $el[0] === 'addAlerter';
+            return $el[0] === 'addVoter';
         });
         $calls = array_values($calls);
 
-        $this->assertEquals(1, count($calls));
+        $this->assertEquals(2, count($calls));
         $this->assertEquals(
             'random.service',
-            (string) $calls[0][1][0]
+            (string) $calls[1][1][0]
         );
     }
 }

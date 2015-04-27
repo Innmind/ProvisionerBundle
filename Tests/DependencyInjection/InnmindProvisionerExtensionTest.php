@@ -28,6 +28,11 @@ class InnmindProvisionerExtensionTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 'triggers' => ['rabbitmq:consumer'],
+                'trigger_manager' => [
+                    'strategy' => 'consensus',
+                    'allow_if_equal_granted_denied' => false,
+                    'allow_if_all_abstain' => true
+                ],
                 'rabbitmq' => [
                     'queue_depth' => [
                         'history_length' => 1,
@@ -45,18 +50,6 @@ class InnmindProvisionerExtensionTest extends \PHPUnit_Framework_TestCase
             $this->config['innmind_provisioner'],
             $this->container->getParameter('innmind_provisioner')
         );
-    }
-
-    public function testAddTriggers()
-    {
-        $def = $this->container->getDefinition('innmind_provisioner.listener.console');
-        $calls = array_filter($def->getMethodCalls(), function ($el) {
-            return $el[0] === 'addTrigger';
-        });
-        $calls = array_values($calls);
-
-        $this->assertEquals(1, count($calls));
-        $this->assertEquals(['rabbitmq:consumer'], $calls[0][1]);
     }
 
     public function testSetMaxCpuThresholdOnDecisionManager()
@@ -254,5 +247,26 @@ class InnmindProvisionerExtensionTest extends \PHPUnit_Framework_TestCase
             'some token',
             $client->getArguments()[0]
         );
+    }
+
+    public function testTriggerManagerStrategy()
+    {
+        $def = $this->container->getDefinition('innmind_provisioner.trigger_manager');
+
+        $this->assertEquals('consensus', $def->getArgument(0));
+    }
+
+    public function testTriggerManagerSwitchEqualGrantDenied()
+    {
+        $def = $this->container->getDefinition('innmind_provisioner.trigger_manager');
+
+        $this->assertFalse($def->getArgument(1));
+    }
+
+    public function testTriggerManagerSwitchAllAbstain()
+    {
+        $def = $this->container->getDefinition('innmind_provisioner.trigger_manager');
+
+        $this->assertTrue($def->getArgument(2));
     }
 }

@@ -25,9 +25,9 @@ class ConsoleListener
     }
 
     /**
-     * Add a command name that can trigger the provisionning
+     * Set the manager used to know if the provisioning should be started
      *
-     * @param string $command
+     * @param string $manager
      */
     public function setTriggerManager(TriggerManager $manager)
     {
@@ -49,7 +49,7 @@ class ConsoleListener
         $command = $event->getCommand()->getName();
         $input = $event->getInput();
 
-        if ($this->trigger->decode($command, $input)) {
+        if ($this->trigger->decide($command, $input)) {
             $this->decision->provision($command, $input);
         }
     }

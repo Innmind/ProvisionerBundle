@@ -51,7 +51,11 @@ innmind_provisioner:
             min: 0
     triggers:
         - 'rabbitmq:consumer'           # list of symfony commands that triggers the provisioner when one of them finishes
-     alerting:
+    trigger_manager:                    # this section can be omitted
+        strategy: 'affirmative'         # can be 'affirmative', 'consensus' or 'unanimous'
+        allow_if_all_abstain: false
+        allow_if_equal_granted_denied: true
+    alerting:
         email: it@company.tld           # the mail where to send alerts (optional)
         webhook:
             - 'http://url/to/webhook'   # URIs to notify when alerts raised (optional)

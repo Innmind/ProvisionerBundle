@@ -51,7 +51,7 @@ innmind_provisioner:
             min: 0
     triggers:
         - 'rabbitmq:consumer'           # list of symfony commands that triggers the provisioner when one of them finishes
-     alerting:
+    alerting:
         email: it@company.tld           # the mail where to send alerts (optional)
         webhook:
             - 'http://url/to/webhook'   # URIs to notify when alerts raised (optional)

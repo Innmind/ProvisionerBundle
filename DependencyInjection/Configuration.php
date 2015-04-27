@@ -4,6 +4,7 @@ namespace Innmind\ProvisionerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Innmind\ProvisionerBundle\TriggerManager;
 
 /**
  * This is the class that validates and merges configuration from your app/config files
@@ -59,7 +60,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('strategy')
-                            ->defaultValue('affirmative')
+                            ->defaultValue(TriggerManager::STRATEGY_AFFIRMATIVE)
                         ->end()
                         ->booleanNode('allow_if_all_abstain')
                             ->defaultFalse()

@@ -1,10 +1,10 @@
-# InnmindProvisionerBundle
+# ProvisionerBundle
 
-[![Build Status](https://travis-ci.org/Baptouuuu/InnmindProvisionerBundle.svg?branch=master)](https://travis-ci.org/Baptouuuu/InnmindProvisionerBundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Baptouuuu/InnmindProvisionerBundle/?branch=master)
+[![Build Status](https://travis-ci.org/Innmind/ProvisionerBundle.svg?branch=master)](https://travis-ci.org/Innmind/ProvisionerBundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Innmind/ProvisionerBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Innmind/ProvisionerBundle/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Innmind/ProvisionerBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Innmind/ProvisionerBundle/?branch=master)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/d1f6a225-90d5-47fd-a30a-cea46dd18fd4/big.png)](https://insight.sensiolabs.com/projects/d1f6a225-90d5-47fd-a30a-cea46dd18fd4)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/3e5c3b50-4489-4a73-a007-e5777d74d894/big.png)](https://insight.sensiolabs.com/projects/3e5c3b50-4489-4a73-a007-e5777d74d894)
 
 This bundle provide a mechanism to automatically run symfony commands when one finishes and adapt the number runned based on the server resources available. Currently it only works for the `rabbitmq:consumer` command provided by [`RabbitMqBundle`](https://github.com/videlalvaro/RabbitMqBundle), but check the [documentation](Resources/doc/) to see to extend the bundle capacities.
 

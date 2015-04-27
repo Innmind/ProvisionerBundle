@@ -56,6 +56,7 @@ class Configuration implements ConfigurationInterface
                     ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('trigger_manager')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('strategy')
                             ->defaultValue('affirmative')

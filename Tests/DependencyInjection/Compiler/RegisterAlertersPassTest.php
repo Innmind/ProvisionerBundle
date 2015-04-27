@@ -42,7 +42,7 @@ class RegisterAlertersPassTest extends \PHPUnit_Framework_TestCase
         $this->container->setDefinition('random.service', $definition);
     }
 
-    public function testSetConsumerDefinitions()
+    public function testSetAlerters()
     {
         $pass = new RegisterAlertersPass();
         $pass->process($this->container);
